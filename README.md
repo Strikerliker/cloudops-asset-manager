@@ -6,6 +6,37 @@ A serverless AWS CRUD application for managing cloud and IT assets. Built with A
 
 CloudOps Asset Manager provides an inventory system for cloud and IT resources. Operators can create asset records, view inventory, update asset metadata and status, and delete retired assets.
 
+## Application Flow Chart
+
+```mermaid
+flowchart LR
+    U[CloudOps User] --> D[Web Dashboard]
+    D --> C{CRUD Action}
+    C -->|Create| P[POST /assets]
+    C -->|Read| G[GET /assets]
+    C -->|Update| T[PUT /assets/{assetId}]
+    C -->|Delete| X[DELETE /assets/{assetId}]
+    P --> R[API Response]
+    G --> R
+    T --> R
+    X --> R
+    R --> D
+```
+
+## AWS Architecture Diagram
+
+```mermaid
+flowchart LR
+    B[Browser / Web Dashboard] -->|HTTPS| A[Amazon API Gateway]
+    A --> L[AWS Lambda CRUD Handler]
+    L --> DB[(Amazon DynamoDB Asset Inventory)]
+    L --> CW[Amazon CloudWatch Logs & Metrics]
+    IAM[AWS IAM Least-Privilege Role] -. permissions .-> L
+    IAM -. DynamoDB access .-> DB
+```
+
+The two diagrams are intentionally separate: the first explains the user's CRUD workflow, while the second explains the AWS implementation.
+
 ## CRUD API
 
 | Operation | Method | Endpoint |
@@ -15,16 +46,6 @@ CloudOps Asset Manager provides an inventory system for cloud and IT resources. 
 | Read one | GET | `/assets/{assetId}` |
 | Update | PUT | `/assets/{assetId}` |
 | Delete | DELETE | `/assets/{assetId}` |
-
-## Architecture
-
-```text
-User -> Web Dashboard -> API Gateway -> AWS Lambda -> DynamoDB
-                                      |
-                                  CloudWatch
-
-IAM provides least-privilege permissions between AWS services.
-```
 
 ## Example asset
 
@@ -57,6 +78,8 @@ cloudops-asset-manager/
 ├── frontend/index.html
 ├── frontend/app.js
 ├── frontend/styles.css
+├── docs/architecture.md
+├── docs/api.md
 ├── template.yaml
 ├── README.md
 └── .gitignore
