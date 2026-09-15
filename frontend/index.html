@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CloudOps Asset Manager</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">AWS SERVERLESS OPERATIONS</p>
+      <h1>CloudOps Asset Manager</h1>
+      <p>Manage cloud and IT assets through a serverless AWS CRUD application.</p>
+    </div>
+    <button id="refreshBtn">Refresh Inventory</button>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2 id="formTitle">Add Asset</h2>
+      <form id="assetForm">
+        <input id="assetId" type="hidden">
+        <label>Name<input id="name" required placeholder="Production-Web-01"></label>
+        <label>Type<input id="type" required placeholder="EC2 Instance"></label>
+        <label>Environment<select id="environment" required><option>Production</option><option>Development</option><option>Test</option><option>Staging</option></select></label>
+        <label>AWS Region<input id="region" required value="us-east-2"></label>
+        <label>Owner<input id="owner" required placeholder="Cloud Operations"></label>
+        <label>Status<select id="status" required><option>Active</option><option>Maintenance</option><option>Stopped</option><option>Retired</option></select></label>
+        <div class="actions"><button type="submit">Save Asset</button><button id="cancelBtn" type="button" class="secondary">Cancel</button></div>
+      </form>
+    </section>
+
+    <section class="panel inventory">
+      <div class="inventory-heading"><div><p class="eyebrow">INVENTORY</p><h2>Cloud Assets</h2></div><span id="assetCount">0 assets</span></div>
+      <p id="message"></p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Type</th><th>Environment</th><th>Region</th><th>Owner</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="assetRows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
