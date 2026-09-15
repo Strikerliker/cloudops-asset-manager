@@ -1,0 +1,87 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: CloudOps Asset Manager serverless CRUD API
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 10
+    MemorySize: 256
+
+Resources:
+  AssetsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: assetId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: assetId
+          KeyType: HASH
+
+  AssetApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - '*'
+        AllowHeaders:
+          - Content-Type
+        AllowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+
+  AssetFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: app.lambda_handler
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref AssetsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AssetsTable
+      Events:
+        ListAssets:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AssetApi
+            Path: /assets
+            Method: GET
+        CreateAsset:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AssetApi
+            Path: /assets
+            Method: POST
+        GetAsset:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AssetApi
+            Path: /assets/{assetId}
+            Method: GET
+        UpdateAsset:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AssetApi
+            Path: /assets/{assetId}
+            Method: PUT
+        DeleteAsset:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AssetApi
+            Path: /assets/{assetId}
+            Method: DELETE
+
+Outputs:
+  ApiUrl:
+    Description: CloudOps Asset Manager API endpoint
+    Value: !Sub 'https://${AssetApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}'
+  TableName:
+    Description: DynamoDB asset table
+    Value: !Ref AssetsTable
