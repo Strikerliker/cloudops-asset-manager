@@ -35,6 +35,12 @@ flowchart LR
     IAM -. DynamoDB access .-> DB
 ```
 
+### Polished AWS architecture drawing
+
+![CloudOps Asset Manager AWS architecture](docs/cloudops-asset-manager-aws-architecture.svg)
+
+The polished drawing keeps the implemented core path — Browser → API Gateway → Lambda → DynamoDB with IAM and CloudWatch — and shows S3/CloudFront frontend hosting only as an optional production extension.
+
 The two diagrams are intentionally separate: the first explains the user's CRUD workflow, while the second explains the AWS implementation.
 
 ## CRUD API
@@ -80,6 +86,7 @@ cloudops-asset-manager/
 ├── frontend/styles.css
 ├── docs/architecture.md
 ├── docs/api.md
+├── docs/cloudops-asset-manager-aws-architecture.svg
 ├── template.yaml
 ├── README.md
 └── .gitignore
