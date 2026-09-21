@@ -8,6 +8,8 @@ CloudOps Asset Manager provides an inventory system for cloud and IT resources. 
 
 ## Application Flow Chart
 
+![CloudOps Asset Manager data flow](docs/cloudops-asset-manager-data-flow.svg)
+
 ```mermaid
 flowchart LR
     U[CloudOps User] --> D[Web Dashboard]
@@ -41,7 +43,13 @@ flowchart LR
 
 The polished drawing keeps the implemented core path — Browser → API Gateway → Lambda → DynamoDB with IAM and CloudWatch — and shows S3/CloudFront frontend hosting only as an optional production extension.
 
-The two diagrams are intentionally separate: the first explains the user's CRUD workflow, while the second explains the AWS implementation.
+The data-flow and AWS architecture diagrams are intentionally separate: the first explains how CRUD data moves, while the second explains the implemented AWS design.
+
+## Azure Reference Architecture
+
+![CloudOps Asset Manager Azure reference architecture](docs/cloudops-asset-manager-azure-architecture.svg)
+
+This Azure drawing is a conceptual equivalent of the same CRUD pattern and is not presented as the implemented project stack.
 
 ## CRUD API
 
